@@ -513,12 +513,15 @@ export default function Home() {
     }
   };
 
-  // 导出 SVG
-  const handleExportSVG = async () => {
+  // 通用导出函数（支持 SVG/PNG/JPEG）
+  const handleExportImage = async (
+    format: "svg" | "png" | "jpeg",
+    exportFn: () => Promise<string>,
+  ) => {
     try {
-      const svgContent = await editorRef.current?.exportSVG();
+      const content = await exportFn();
 
-      if (!svgContent) {
+      if (!content) {
         push({
           description: t("toasts.noContentToSave"),
           variant: "warning",
@@ -527,7 +530,7 @@ export default function Home() {
       }
 
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-      const fileName = `diagram_${timestamp}.svg`;
+      const fileName = `diagram_${timestamp}.${format}`;
 
       const joinPath = (basePath: string, name: string) => {
         const separator = basePath.includes("\\") ? "\\" : "/";
@@ -537,10 +540,29 @@ export default function Home() {
         return `${normalized}${separator}${name}`;
       };
 
+      // 将 data URI 转换为实际内容（PNG/JPEG 是 data URI，SVG 是文本）
+      const getFileContent = (content: string, format: string): string => {
+        // PNG/JPEG 返回的是 data URI，需要转换为 base64 字符串
+        if (format === "png" || format === "jpeg") {
+          const prefix =
+            format === "png"
+              ? "data:image/png;base64,"
+              : "data:image/jpeg;base64,";
+          if (content.startsWith(prefix)) {
+            return content.substring(prefix.length);
+          }
+        }
+        // SVG 直接返回文本内容
+        return content;
+      };
+
+      const fileContent = getFileContent(content, format);
+
+      // Electron 环境
       if (typeof window !== "undefined" && window.electron) {
         if (settings.defaultPath) {
           const filePath = joinPath(settings.defaultPath, fileName);
-          const result = await window.electron.writeFile(filePath, svgContent);
+          const result = await window.electron.writeFile(filePath, fileContent);
 
           if (result.success) {
             push({
@@ -559,17 +581,23 @@ export default function Home() {
           return;
         }
 
+        const filterName =
+          format === "svg"
+            ? "SVG Files"
+            : format === "png"
+              ? "PNG Files"
+              : "JPEG Files";
         const filePath = await window.electron.showSaveDialog({
-          defaultPath: "diagram.svg",
+          defaultPath: `diagram.${format}`,
           filters: [
-            { name: "SVG Files", extensions: ["svg"] },
+            { name: filterName, extensions: [format] },
             { name: "All Files", extensions: ["*"] },
           ],
         });
 
         if (!filePath) return;
 
-        const result = await window.electron.writeFile(filePath, svgContent);
+        const result = await window.electron.writeFile(filePath, fileContent);
         if (result.success) {
           push({
             description: t("toasts.fileSaved", { filePath }),
@@ -588,11 +616,28 @@ export default function Home() {
       }
 
       // 浏览器环境下载文件
-      const blob = new Blob([svgContent], { type: "image/svg+xml" });
+      let blob: Blob;
+      if (format === "svg") {
+        // SVG 是文本格式
+        blob = new Blob([content], { type: "image/svg+xml" });
+      } else {
+        // PNG/JPEG 是 data URI，需要转换为 Blob
+        const mimeType = format === "png" ? "image/png" : "image/jpeg";
+        
+        // 将 base64 转换为 Blob
+        const byteString = atob(fileContent);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+          uint8Array[i] = byteString.charCodeAt(i);
+        }
+        blob = new Blob([uint8Array], { type: mimeType });
+      }
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "diagram.svg";
+      a.download = fileName;
       a.click();
       push({
         description: t("toasts.saveSuccess"),
@@ -600,12 +645,30 @@ export default function Home() {
       });
       URL.revokeObjectURL(url);
     } catch (error) {
-      logger.error("导出 SVG 失败", { error });
+      logger.error(`导出 ${format.toUpperCase()} 失败`, { error });
       push({
         description: t("toasts.saveFailed", { error: toErrorString(error) }),
         variant: "danger",
       });
     }
+  };
+
+  // 导出 SVG
+  const handleExportSVG = async () => {
+    if (!editorRef.current?.exportSVG) return;
+    await handleExportImage("svg", () => editorRef.current!.exportSVG());
+  };
+
+  // 导出 PNG
+  const handleExportPNG = async () => {
+    if (!editorRef.current?.exportPNG) return;
+    await handleExportImage("png", () => editorRef.current!.exportPNG());
+  };
+
+  // 导出 JPEG
+  const handleExportJPEG = async () => {
+    if (!editorRef.current?.exportJPEG) return;
+    await handleExportImage("jpeg", () => editorRef.current!.exportJPEG());
   };
 
   // 加载文件
@@ -917,6 +980,8 @@ export default function Home() {
         onLoad={handleLoad}
         onSave={handleManualSave}
         onExportSVG={handleExportSVG}
+        onExportPNG={handleExportPNG}
+        onExportJPEG={handleExportJPEG}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={handleToggleSidebarVisibility}
       />

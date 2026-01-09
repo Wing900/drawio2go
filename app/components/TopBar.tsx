@@ -21,6 +21,8 @@ interface TopBarProps {
   onLoad?: () => void;
   onSave?: () => void;
   onExportSVG?: () => void;
+  onExportPNG?: () => void;
+  onExportJPEG?: () => void;
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
 }
@@ -32,6 +34,8 @@ export default function TopBar({
   onLoad,
   onSave,
   onExportSVG,
+  onExportPNG,
+  onExportJPEG,
   isSidebarOpen,
   onToggleSidebar,
 }: TopBarProps) {
@@ -70,7 +74,7 @@ export default function TopBar({
           </Button>
         )}
 
-        {(onSave || onExportSVG) && (
+        {(onSave || onExportSVG || onExportPNG || onExportJPEG) && (
           <Dropdown>
             <Button variant="primary" size="sm" className="top-bar-button">
               <FileDown className="h-4 w-4" />
@@ -82,12 +86,18 @@ export default function TopBar({
                 disabledKeys={[
                   ...(onSave ? [] : ["export-drawio"]),
                   ...(onExportSVG ? [] : ["export-svg"]),
+                  ...(onExportPNG ? [] : ["export-png"]),
+                  ...(onExportJPEG ? [] : ["export-jpeg"]),
                 ]}
                 onAction={(key) => {
                   if (key === "export-drawio") {
                     onSave?.();
                   } else if (key === "export-svg") {
                     onExportSVG?.();
+                  } else if (key === "export-png") {
+                    onExportPNG?.();
+                  } else if (key === "export-jpeg") {
+                    onExportJPEG?.();
                   }
                 }}
               >
@@ -100,6 +110,14 @@ export default function TopBar({
                 <Dropdown.Item id="export-svg" textValue="export-svg">
                   <FileImage className="h-4 w-4" />
                   <Label>{t("buttons.exportSvg", "导出为 .svg 文件")}</Label>
+                </Dropdown.Item>
+                <Dropdown.Item id="export-png" textValue="export-png">
+                  <FileImage className="h-4 w-4" />
+                  <Label>{t("buttons.exportPng", "导出为 .png 文件")}</Label>
+                </Dropdown.Item>
+                <Dropdown.Item id="export-jpeg" textValue="export-jpeg">
+                  <FileImage className="h-4 w-4" />
+                  <Label>{t("buttons.exportJpeg", "导出为 .jpeg 文件")}</Label>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown.Popover>

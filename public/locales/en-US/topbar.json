@@ -7,7 +7,9 @@
     "save": "Save",
     "export": "Export",
     "exportDrawio": "Export as .drawio",
-    "exportSvg": "Export as .svg"
+    "exportSvg": "Export as .svg",
+    "exportPng": "Export as .png",
+    "exportJpeg": "Export as .jpeg"
   },
   "aria": {
     "collapseSidebar": "Collapse sidebar",

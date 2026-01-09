@@ -29,11 +29,18 @@ import { toErrorString } from "@/app/lib/error-handler";
 
 const logger = createLogger("DrawioEditorNative");
 
-type DrawioExportFormat = "xml" | "svg";
+type DrawioExportFormat = "xml" | "svg" | "png" | "jpeg";
 
 // SVG 导出选项（根据 DrawIO 官方文档）
 export interface SVGExportOptions {
   embedImages?: boolean; // 是否嵌入图片（默认 false，减小文件大小）
+  scale?: number; // 缩放比例（默认 1）
+  border?: number; // 边框大小（像素，默认 10）
+  background?: string; // 背景颜色（默认 #FFFFFF）
+}
+
+// PNG/JPEG 导出选项
+export interface ImageExportOptions {
   scale?: number; // 缩放比例（默认 1）
   border?: number; // 边框大小（像素，默认 10）
   background?: string; // 背景颜色（默认 #FFFFFF）
@@ -52,6 +59,8 @@ export interface DrawioEditorRef {
   mergeDiagram: (xml: string, requestId?: string) => void;
   exportDiagram: () => Promise<string>;
   exportSVG: (options?: SVGExportOptions) => Promise<string>;
+  exportPNG: (options?: ImageExportOptions) => Promise<string>;
+  exportJPEG: (options?: ImageExportOptions) => Promise<string>;
 }
 
 interface DrawioEditorNativeProps {
@@ -77,14 +86,24 @@ interface RawDrawioCell {
 }
 
 // 解码 data URI 格式的 base64 内容
-// 支持 data:image/svg+xml;base64,... 等格式
-// 用于处理 DrawIO export 返回的 data URI（如 SVG 导出）
+// - SVG: 解码为文本（data:image/svg+xml;base64,... → <svg>...</svg>）
+// - PNG/JPEG: 保持 data URI 格式（data:image/png;base64,... → 原样返回）
 function decodeBase64DataURI(dataUri: string): string {
-  const prefix = "data:image/svg+xml;base64,";
+  // PNG/JPEG 等二进制图片格式：直接返回 data URI（浏览器可以直接使用）
+  if (
+    dataUri.startsWith("data:image/png;base64,") ||
+    dataUri.startsWith("data:image/jpeg;base64,") ||
+    dataUri.startsWith("data:image/jpg;base64,")
+  ) {
+    logger.debug("检测到 PNG/JPEG data URI，保持原样");
+    return dataUri;
+  }
 
-  if (dataUri.startsWith(prefix)) {
+  // SVG 格式：解码为文本
+  const svgPrefix = "data:image/svg+xml;base64,";
+  if (dataUri.startsWith(svgPrefix)) {
     try {
-      const base64Content = dataUri.substring(prefix.length);
+      const base64Content = dataUri.substring(svgPrefix.length);
 
       // 正确处理 UTF-8 编码：
       // atob() 返回 binary string (Latin-1)，需要转换为 UTF-8
@@ -92,7 +111,7 @@ function decodeBase64DataURI(dataUri: string): string {
       const bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));
       const decoded = new TextDecoder("utf-8").decode(bytes);
 
-      logger.debug("Base64 data URI 已解码");
+      logger.debug("SVG Base64 data URI 已解码为文本");
       return decoded;
     } catch (error) {
       logger.error("Base64 解码失败:", error);
@@ -100,7 +119,7 @@ function decodeBase64DataURI(dataUri: string): string {
     }
   }
 
-  return dataUri; // 非 base64 data URI 格式直接返回
+  return dataUri; // 其他格式直接返回
 }
 
 const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
@@ -394,11 +413,11 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
       [dispatchLoadCommand, isReady],
     );
 
-    // 导出当前图表的 XML 或 SVG（返回 Promise）
+    // 导出当前图表的 XML 或 SVG/PNG/JPEG（返回 Promise）
     const requestExport = useCallback(
       (
         format: DrawioExportFormat,
-        options?: SVGExportOptions,
+        options?: SVGExportOptions | ImageExportOptions,
       ): Promise<string> => {
         return new Promise((resolve) => {
           if (
@@ -413,16 +432,25 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
               border: 10, // 10px 边框，避免裁切
             };
 
+            // PNG/JPEG 导出默认值（超高清）
+            const defaultImageOptions: ImageExportOptions = {
+              scale: 5, // 5倍分辨率（超高清）
+              border: 10, // 10px 边框，避免裁切
+              background: "#FFFFFF", // 白色背景
+            };
+
             // 合并用户提供的选项
-            const svgOptions =
-              format === "svg"
-                ? { ...defaultSvgOptions, ...options }
-                : undefined;
+            let exportOptions: Record<string, unknown> | undefined;
+            if (format === "svg") {
+              exportOptions = { ...defaultSvgOptions, ...options };
+            } else if (format === "png" || format === "jpeg") {
+              exportOptions = { ...defaultImageOptions, ...options };
+            }
 
             const exportData: Record<string, unknown> = {
               action: "export",
               format,
-              ...(svgOptions || {}), // 如果是 SVG，合并导出选项
+              ...(exportOptions || {}), // 合并导出选项
             };
 
             const formatKey = format.toLowerCase();
@@ -453,7 +481,7 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
             queue.push(entry);
             pendingExportsRef.current.set(formatKey, queue);
 
-            logger.debug(`发送 export 命令 (${format})`, svgOptions || "");
+            logger.debug(`发送 export 命令 (${format})`, exportOptions || "");
             iframeRef.current.contentWindow.postMessage(
               JSON.stringify(exportData),
               "*",
@@ -472,6 +500,14 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
     );
     const exportSVG = useCallback(
       (options?: SVGExportOptions) => requestExport("svg", options),
+      [requestExport],
+    );
+    const exportPNG = useCallback(
+      (options?: ImageExportOptions) => requestExport("png", options),
+      [requestExport],
+    );
+    const exportJPEG = useCallback(
+      (options?: ImageExportOptions) => requestExport("jpeg", options),
       [requestExport],
     );
 
@@ -509,8 +545,10 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
           mergeWithFallback(xml, requestId),
         exportDiagram,
         exportSVG,
+        exportPNG,
+        exportJPEG,
       }),
-      [loadDiagram, mergeWithFallback, exportDiagram, exportSVG],
+      [loadDiagram, mergeWithFallback, exportDiagram, exportSVG, exportPNG, exportJPEG],
     );
 
     // 使用 ref 保存最新的函数引用，确保防抖函数始终能访问到最新版本
@@ -518,13 +556,17 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
     const mergeWithFallbackRef = useRef(mergeWithFallback);
     const requestExportRef = useRef(requestExport);
     const exportDiagramRef = useRef(exportDiagram);
+    const exportPNGRef = useRef(exportPNG);
+    const exportJPEGRef = useRef(exportJPEG);
 
     useEffect(() => {
       loadDiagramRef.current = loadDiagram;
       mergeWithFallbackRef.current = mergeWithFallback;
       requestExportRef.current = requestExport;
       exportDiagramRef.current = exportDiagram;
-    }, [loadDiagram, mergeWithFallback, requestExport, exportDiagram]);
+      exportPNGRef.current = exportPNG;
+      exportJPEGRef.current = exportJPEG;
+    }, [loadDiagram, mergeWithFallback, requestExport, exportDiagram, exportPNG, exportJPEG]);
 
     useEffect(() => {
       initialXmlRef.current = initialXml;
@@ -598,27 +640,48 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
 
     const tryResolveExportRequest = useCallback(
       (
-        decodedSvg: string,
+        decodedData: string,
         decodedXml: string,
-        payload: { hasXml: boolean; hasSvg: boolean; format?: unknown },
+        payload: { hasXml: boolean; hasData: boolean; format?: unknown },
       ) => {
         // 智能解析：依次尝试不同格式，直到成功匹配待处理的导出请求
         // 不依赖 data.format 字段，因为 DrawIO 可能不返回该字段
         let resolved = false;
 
-        // 1. 优先尝试 SVG（如果有 data.data 字段）
-        if (decodedSvg) {
-          resolved = settleExport("svg", decodedSvg);
-          logger.debug(`  尝试 SVG 格式: ${resolved ? "成功" : "失败"}`);
+        // 1. 优先尝试 PNG（如果有 data.data 字段）
+        if (decodedData) {
+          resolved = settleExport("png", decodedData);
+          if (resolved) {
+            logger.debug(`  尝试 PNG 格式: 成功`);
+            return resolved;
+          }
         }
 
-        // 2. 如果 SVG 失败，尝试 XML（如果有 data.xml 字段）
+        // 2. 尝试 JPEG（如果有 data.data 字段）
+        if (decodedData) {
+          resolved = settleExport("jpeg", decodedData);
+          if (resolved) {
+            logger.debug(`  尝试 JPEG 格式: 成功`);
+            return resolved;
+          }
+        }
+
+        // 3. 尝试 SVG（如果有 data.data 字段）
+        if (decodedData) {
+          resolved = settleExport("svg", decodedData);
+          if (resolved) {
+            logger.debug(`  尝试 SVG 格式: 成功`);
+            return resolved;
+          }
+        }
+
+        // 4. 如果以上都失败，尝试 XML（如果有 data.xml 字段）
         if (!resolved && decodedXml) {
           resolved = settleExport("xml", decodedXml);
           logger.debug(`  尝试 XML 格式: ${resolved ? "成功" : "失败"}`);
         }
 
-        // 3. 记录失败情况（用于调试）
+        // 5. 记录失败情况（用于调试）
         if (!resolved) {
           logger.warn("无法匹配任何待处理的导出请求");
           logger.warn("  响应中的数据:", payload);
@@ -635,17 +698,17 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
 
         // 读取所有可能的数据字段
         // - data.xml: XML 格式的 DrawIO 源文件
-        // - data.data: SVG 等其他格式的导出内容（通常是 data URI）
+        // - data.data: SVG/PNG/JPEG 等其他格式的导出内容（通常是 data URI）
         const xmlData = typeof data.xml === "string" ? data.xml : "";
-        const svgData = typeof data.data === "string" ? data.data : "";
+        const exportData = typeof data.data === "string" ? data.data : "";
 
         // 解码数据（处理 base64 data URI）
         const decodedXml = xmlData ? decodeBase64DataURI(xmlData) : "";
-        const decodedSvg = svgData ? decodeBase64DataURI(svgData) : "";
+        const decodedData = exportData ? decodeBase64DataURI(exportData) : "";
 
-        tryResolveExportRequest(decodedSvg, decodedXml, {
+        tryResolveExportRequest(decodedData, decodedXml, {
           hasXml: !!xmlData,
-          hasSvg: !!svgData,
+          hasData: !!exportData,
           format: data.format,
         });
 

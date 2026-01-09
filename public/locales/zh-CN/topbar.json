@@ -7,7 +7,9 @@
     "save": "保存",
     "export": "导出",
     "exportDrawio": "导出为 .drawio 文件",
-    "exportSvg": "导出为 .svg 文件"
+    "exportSvg": "导出为 .svg 文件",
+    "exportPng": "导出为 .png 文件",
+    "exportJpeg": "导出为 .jpeg 文件"
   },
   "aria": {
     "collapseSidebar": "收起侧栏",

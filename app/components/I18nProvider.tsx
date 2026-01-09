@@ -30,6 +30,8 @@ const getDocumentLang = () => {
  * - 避免首屏访问 localStorage，兼容 SSR/SSG 和 Electron file:// 场景
  */
 export function I18nProvider({ children, locale }: I18nProviderProps) {
+  const [isReady, setIsReady] = useState(false);
+
   // 首次渲染仅使用安全来源（props/i18n/default），避免触发浏览器存储访问
   const [, setLanguage] = useState<string>(
     locale ?? i18n.language ?? getDocumentLang() ?? defaultLocale,
@@ -46,6 +48,19 @@ export function I18nProvider({ children, locale }: I18nProviderProps) {
       });
     }
 
+    // 等待 i18n 初始化完成后再渲染，避免 hydration mismatch
+    const checkReady = () => {
+      if (i18n.isInitialized) {
+        setIsReady(true);
+      }
+    };
+
+    if (i18n.isInitialized) {
+      setIsReady(true);
+    } else {
+      i18n.on("initialized", checkReady);
+    }
+
     // 确保 <html lang> 始终与 i18n 状态保持一致
     if (typeof document !== "undefined") {
       document.documentElement.lang = i18n.language || initialLang;
@@ -60,6 +75,7 @@ export function I18nProvider({ children, locale }: I18nProviderProps) {
 
     i18n.on("languageChanged", handleLanguageChanged);
     return () => {
+      i18n.off("initialized", checkReady);
       i18n.off("languageChanged", handleLanguageChanged);
     };
   }, [locale]);
@@ -72,6 +88,12 @@ export function I18nProvider({ children, locale }: I18nProviderProps) {
     defaultNamespace = defaultNS;
   } else {
     defaultNamespace = undefined;
+  }
+
+  // i18n 未初始化完成时返回 null，避免 hydration mismatch
+  // 客户端渲染会重新挂载，不会有闪烁问题
+  if (!isReady) {
+    return null;
   }
 
   return (
