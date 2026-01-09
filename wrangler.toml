@@ -10,4 +10,3 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 VERCEL = "1"
 NODE_VERSION = "20"
-CF_PAGES = "1"
