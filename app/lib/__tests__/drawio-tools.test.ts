@@ -81,6 +81,8 @@ const createMockEditorRef = (
     exportDiagram: vi.fn().mockResolvedValue(exportXml),
     loadDiagram: vi.fn(),
     exportSVG: vi.fn(),
+    exportPNG: vi.fn(),
+    exportJPEG: vi.fn(),
   },
 });
 
