@@ -1,5 +1,4 @@
-// Cloudflare Pages 使用 Node.js runtime（Edge Runtime 不支持某些依赖）
-// export const runtime = 'edge';
+export const runtime = 'edge';
 
 import { normalizeLLMConfig, isProviderType } from "@/app/lib/config-utils";
 import {

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
-// Cloudflare Pages 使用 Node.js runtime
-// export const runtime = "edge";
+export const runtime = "edge";
 
 const headers = {
   "Cache-Control": "no-store, max-age=0",
