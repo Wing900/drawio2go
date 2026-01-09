@@ -123,6 +123,17 @@ async function copyTextToClipboard(text: string) {
   return copyFallback();
 }
 
+// 根据导出格式获取文件过滤器名称
+function getFilterName(format: "svg" | "png" | "jpeg"): string {
+  if (format === "svg") {
+    return "SVG Files";
+  }
+  if (format === "png") {
+    return "PNG Files";
+  }
+  return "JPEG Files";
+}
+
 export default function Home() {
   // 存储 Hook
   const { getGeneralSettings } = useStorageSettings();
@@ -581,12 +592,8 @@ export default function Home() {
           return;
         }
 
-        const filterName =
-          format === "svg"
-            ? "SVG Files"
-            : format === "png"
-              ? "PNG Files"
-              : "JPEG Files";
+        // 根据格式获取文件过滤器名称
+        const filterName = getFilterName(format);
         const filePath = await window.electron.showSaveDialog({
           defaultPath: `diagram.${format}`,
           filters: [

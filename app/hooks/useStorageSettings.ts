@@ -1248,9 +1248,6 @@ export function useStorageSettings() {
       loadAgentSettings,
       loadModels,
       loadProviders,
-      isBuiltinProviderEnabled,
-      getBuiltinProvider,
-      getBuiltinModels,
     ],
   );
 
