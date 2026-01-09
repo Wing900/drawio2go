@@ -46,8 +46,9 @@
  */
 
 import type { StorageAdapter } from "./adapter";
-import { SQLiteStorage } from "./sqlite-storage";
-import { IndexedDBStorage } from "./indexeddb-storage";
+// Dynamic imports used instead of static imports to avoid bundling issues
+// import { SQLiteStorage } from "./sqlite-storage";
+// import { IndexedDBStorage } from "./indexeddb-storage";
 import { createLogger } from "@/lib/logger";
 
 const logger = createLogger("StorageFactory");
@@ -115,11 +116,13 @@ async function _initializeStorage(): Promise<StorageAdapter> {
   // 检测 Electron 环境
   if (typeof window !== "undefined" && window.electronStorage) {
     logger.info("Detected Electron environment，使用 SQLite");
+    const { SQLiteStorage } = await import("./sqlite-storage");
     storage = new SQLiteStorage();
   }
   // 检测 Web 环境
   else if (typeof window !== "undefined" && typeof indexedDB !== "undefined") {
     logger.info("Detected Web environment，使用 IndexedDB");
+    const { IndexedDBStorage } = await import("./indexeddb-storage");
     storage = new IndexedDBStorage();
   }
   // 不支持的环境
