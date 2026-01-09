@@ -1,7 +1,7 @@
 {
   "installCommand": "npm ci --ignore-scripts",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
+  "buildCommand": "npx @cloudflare/next-on-pages",
+  "outputDirectory": ".vercel/output/static",
   "functions": {
     "app/api/ai-proxy/route.ts": {
       "maxDuration": 300
