@@ -46,6 +46,7 @@
     "@tanstack/react-virtual": "^3.13.12",
     "@xmldom/xmldom": "^0.8.11",
     "ai": "^6.0.3",
+    "antd": "^6.1.4",
     "better-sqlite3": "^12.5.0",
     "date-fns": "^4.1.0",
     "diff-match-patch": "^1.0.5",
