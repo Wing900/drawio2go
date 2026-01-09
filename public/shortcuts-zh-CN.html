@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>键盘快捷键 - DrawIO</title>
+    <style>
+        :root {
+            --md-sys-color-primary: #E3F2FD;
+            --md-sys-color-on-primary: #1565C0;
+            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-background: #FEFBFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--md-sys-color-on-surface);
+            background: var(--md-sys-color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .app-bar {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            color: var(--md-sys-color-on-primary);
+            padding: 16px 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        
+        .app-bar h1 {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.15px;
+        }
+        
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .intro {
+            margin-bottom: 32px;
+            padding: 16px;
+            background: var(--md-sys-color-surface-variant);
+            border-radius: 12px;
+        }
+        
+        .intro p {
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 1.6;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 16px;
+            letter-spacing: 0.1px;
+        }
+        
+        .shortcut-list {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--md-sys-color-surface);
+            border-radius: 8px;
+            border: 1px solid var(--md-sys-color-outline);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .shortcut-item:hover {
+            background: var(--md-sys-color-surface-variant);
+            border-color: var(--md-sys-color-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        .shortcut-keys {
+            min-width: 200px;
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        
+        kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 8px;
+            font-family: 'Roboto Mono', 'Consolas', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            background: var(--md-sys-color-surface-variant);
+            border-radius: 4px;
+            border: 1px solid var(--md-sys-color-outline);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        .shortcut-description {
+            flex: 1;
+            color: var(--md-sys-color-on-surface-variant);
+            padding-left: 16px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: var(--md-sys-color-outline);
+            margin: 24px 0;
+            opacity: 0.2;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .shortcut-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .shortcut-keys {
+                min-width: auto;
+            }
+            
+            .shortcut-description {
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-bar">
+        <h1>键盘快捷键</h1>
+    </div>
+    
+    <div class="container">
+        <div class="intro">
+            <p>使用键盘快捷键可以更高效地使用 DrawIO。macOS 用户请使用 <kbd>Cmd</kbd> 代替 <kbd>Ctrl</kbd>，<kbd>Option</kbd> 代替 <kbd>Alt</kbd>。</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">编辑</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Z</kbd>
+                    </div>
+                    <div class="shortcut-description">撤销</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Y</kbd>
+                    </div>
+                    <div class="shortcut-description">重做</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>X</kbd>
+                    </div>
+                    <div class="shortcut-description">剪切</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>C</kbd>
+                    </div>
+                    <div class="shortcut-description">复制</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>V</kbd>
+                    </div>
+                    <div class="shortcut-description">粘贴</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>D</kbd>
+                    </div>
+                    <div class="shortcut-description">复制选中元素</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Delete</kbd>
+                    </div>
+                    <div class="shortcut-description">删除选中元素</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">选择</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>A</kbd>
+                    </div>
+                    <div class="shortcut-description">全选</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Tab</kbd>
+                    </div>
+                    <div class="shortcut-description">选择下一个元素</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Shift</kbd><kbd>Tab</kbd>
+                    </div>
+                    <div class="shortcut-description">选择上一个元素</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">文本编辑</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Enter</kbd>
+                    </div>
+                    <div class="shortcut-description">开始编辑标签</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>F2</kbd>
+                    </div>
+                    <div class="shortcut-description">编辑选中单元格</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>B</kbd>
+                    </div>
+                    <div class="shortcut-description">粗体</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>I</kbd>
+                    </div>
+                    <div class="shortcut-description">斜体</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>U</kbd>
+                    </div>
+                    <div class="shortcut-description">下划线</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">排列</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>G</kbd>
+                    </div>
+                    <div class="shortcut-description">组合</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>U</kbd>
+                    </div>
+                    <div class="shortcut-description">取消组合</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Home</kbd>
+                    </div>
+                    <div class="shortcut-description">置于顶层</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>End</kbd>
+                    </div>
+                    <div class="shortcut-description">置于底层</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd>
+                    </div>
+                    <div class="shortcut-description">上移一层</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>B</kbd>
+                    </div>
+                    <div class="shortcut-description">下移一层</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">视图</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>+</kbd>
+                    </div>
+                    <div class="shortcut-description">放大</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>-</kbd>
+                    </div>
+                    <div class="shortcut-description">缩小</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>0</kbd>
+                    </div>
+                    <div class="shortcut-description">实际大小</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>H</kbd>
+                    </div>
+                    <div class="shortcut-description">适应窗口</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>G</kbd>
+                    </div>
+                    <div class="shortcut-description">切换网格</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">面板</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>L</kbd>
+                    </div>
+                    <div class="shortcut-description">切换图层面板</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>K</kbd>
+                    </div>
+                    <div class="shortcut-description">切换形状面板</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>P</kbd>
+                    </div>
+                    <div class="shortcut-description">切换格式面板</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>F</kbd>
+                    </div>
+                    <div class="shortcut-description">查找/替换</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">移动</div>
+            <div class="shortcut-list">
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd>
+                    </div>
+                    <div class="shortcut-description">移动元素（1像素）</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Shift</kbd><kbd>方向键</kbd>
+                    </div>
+                    <div class="shortcut-description">移动元素（网格大小）</div>
+                </div>
+                <div class="shortcut-item">
+                    <div class="shortcut-keys">
+                        <kbd>Ctrl</kbd><kbd>方向键</kbd>
+                    </div>
+                    <div class="shortcut-description">调整元素大小</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

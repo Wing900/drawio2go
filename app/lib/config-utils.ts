@@ -479,3 +479,138 @@ export async function initializeDefaultLLMConfig(
     logger.error("Failed to initialize default LLM config", { error });
   }
 }
+
+// ==================== 内置 Provider 配置 ====================
+
+/**
+ * 内置 Provider 配置类型（从环境变量读取）
+ */
+export interface BuiltinProviderConfig {
+  displayName: string;
+  providerType: ProviderType;
+  apiUrl: string;
+  apiKey: string;
+  models: BuiltinModelConfig[];
+}
+
+export interface BuiltinModelConfig {
+  modelName: string;
+  displayName: string;
+  temperature?: number;
+  maxToolRounds?: number;
+  isDefault?: boolean;
+}
+
+/**
+ * 内置 Provider/Model ID 前缀
+ */
+export const BUILTIN_PROVIDER_ID = "builtin-provider";
+export const BUILTIN_MODEL_ID_PREFIX = "builtin-model-";
+
+/**
+ * 环境变量名称
+ * 必须使用 NEXT_PUBLIC_ 前缀才能在客户端访问
+ */
+export const ENV_BUILTIN_PROVIDER = "NEXT_PUBLIC_DRAWIO2GO_BUILTIN_PROVIDER";
+
+/**
+ * 从环境变量解析内置 Provider 配置
+ * 格式示例：
+ * DRAWIO2GO_BUILTIN_PROVIDER='{"displayName":"内置AI","providerType":"openai-compatible","apiUrl":"https://api.example.com/v1","apiKey":"sk-xxx","models":[{"modelName":"gpt-4","displayName":"GPT-4"}]}'
+ */
+export function parseBuiltinProvider(): BuiltinProviderConfig | null {
+  const envValue = typeof process !== "undefined"
+    ? process.env[ENV_BUILTIN_PROVIDER]
+    : undefined;
+
+  if (!envValue || typeof envValue !== "string") {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(envValue) as BuiltinProviderConfig;
+
+    // 验证必需字段
+    if (
+      typeof parsed.displayName !== "string" ||
+      typeof parsed.providerType !== "string" ||
+      typeof parsed.apiUrl !== "string" ||
+      typeof parsed.apiKey !== "string" ||
+      !Array.isArray(parsed.models)
+    ) {
+      logger.warn("Invalid builtin provider config: missing required fields");
+      return null;
+    }
+
+    if (!isProviderType(parsed.providerType)) {
+      logger.warn("Invalid builtin provider config: invalid providerType");
+      return null;
+    }
+
+    return {
+      displayName: parsed.displayName,
+      providerType: parsed.providerType,
+      apiUrl: parsed.apiUrl,
+      apiKey: parsed.apiKey,
+      models: parsed.models.filter(
+        (m) =>
+          typeof m.modelName === "string" && typeof m.displayName === "string",
+      ),
+    };
+  } catch (error) {
+    logger.error("Failed to parse builtin provider config", { error });
+    return null;
+  }
+}
+
+/**
+ * 检查是否启用了内置 Provider
+ */
+export function isBuiltinProviderEnabled(): boolean {
+  return parseBuiltinProvider() !== null;
+}
+
+/**
+ * 获取内置 Provider 配置（转换为 ProviderConfig 格式）
+ */
+export function getBuiltinProvider(): ProviderConfig | null {
+  const builtin = parseBuiltinProvider();
+  if (!builtin) return null;
+
+  const now = Date.now();
+  return {
+    id: BUILTIN_PROVIDER_ID,
+    displayName: builtin.displayName,
+    providerType: builtin.providerType,
+    apiUrl: builtin.apiUrl,
+    apiKey: builtin.apiKey,
+    models: builtin.models.map((m) => BUILTIN_MODEL_ID_PREFIX + m.modelName),
+    customConfig: {},
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+/**
+ * 获取内置 Model 配置列表
+ */
+export function getBuiltinModels(): ModelConfig[] {
+  const builtin = parseBuiltinProvider();
+  if (!builtin) return [];
+
+  const now = Date.now();
+  return builtin.models.map((m, index) => ({
+    id: BUILTIN_MODEL_ID_PREFIX + m.modelName,
+    providerId: BUILTIN_PROVIDER_ID,
+    modelName: m.modelName,
+    displayName: m.displayName,
+    temperature: m.temperature ?? 0.3,
+    maxToolRounds: m.maxToolRounds ?? 20,
+    isDefault: m.isDefault ?? index === 0,
+    capabilities: getDefaultCapabilities(m.modelName),
+    enableToolsInThinking: false,
+    customConfig: {},
+    createdAt: now,
+    updatedAt: now,
+  }));
+}

@@ -31,7 +31,11 @@ import {
   type CreateProviderInput,
   useStorageSettings,
 } from "@/app/hooks/useStorageSettings";
-import { getDefaultApiUrlForProvider } from "@/app/lib/config-utils";
+import {
+  getDefaultApiUrlForProvider,
+  BUILTIN_PROVIDER_ID,
+  isBuiltinProviderEnabled,
+} from "@/app/lib/config-utils";
 import { extractSingleKey, normalizeSelection } from "@/app/lib/select-utils";
 import { useToast } from "@/app/components/toast";
 import type { ProviderConfig, ProviderType } from "@/app/types/chat";
@@ -73,6 +77,8 @@ export function ProviderEditDialog({
   const { t } = useAppTranslation("settings");
   const { push } = useToast();
   const { addProvider, updateProvider } = useStorageSettings();
+  const isBuiltin =
+    isBuiltinProviderEnabled() && provider?.id === BUILTIN_PROVIDER_ID;
 
   const [formData, setFormData] = useState<CreateProviderInput>(defaultForm);
   const [errors, setErrors] = useState<{
@@ -342,6 +348,7 @@ export function ProviderEditDialog({
                       handleFieldChange("apiUrl", event.target.value)
                     }
                     placeholder={t("models.form.apiUrl.placeholder")}
+                    isDisabled={isBuiltin}
                   />
                   <Description className="whitespace-pre-line">
                     {t("models.form.apiUrl.description")}
@@ -365,6 +372,7 @@ export function ProviderEditDialog({
                       handleFieldChange("apiKey", event.target.value)
                     }
                     placeholder={t("models.form.apiKey.placeholder")}
+                    isDisabled={isBuiltin}
                   />
                   <Description>
                     {t("models.form.apiKey.description")}

@@ -40,6 +40,7 @@
 .error-overlay__title {
   margin: 0 0 var(--spacing-xs);
   font-size: 1.25rem;
+  font-weight: 600;
   color: var(--foreground);
 }
 
@@ -47,7 +48,8 @@
 .error-overlay__description {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--foreground-secondary);
+  color: var(--foreground);
+  opacity: 0.85;
   line-height: 1.6;
 }
 

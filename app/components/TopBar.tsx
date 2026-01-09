@@ -9,6 +9,7 @@ import {
   FolderOpen,
   PanelRightClose,
   PanelRightOpen,
+  Keyboard,
 } from "lucide-react";
 import { useAppTranslation } from "@/app/i18n/hooks";
 import { ThemeToggle } from "./ThemeToggle";
@@ -104,6 +105,17 @@ export default function TopBar({
             </Dropdown.Popover>
           </Dropdown>
         )}
+
+        <Button
+          isIconOnly
+          variant="tertiary"
+          size="sm"
+          className="top-bar-button"
+          aria-label={t("aria.shortcuts")}
+          onPress={() => window.open("/shortcuts-zh-CN.html", "_blank")}
+        >
+          <Keyboard size={18} />
+        </Button>
 
         <ThemeToggle />
 

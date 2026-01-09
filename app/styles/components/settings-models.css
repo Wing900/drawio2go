@@ -1,10 +1,11 @@
+/* 模型能力按钮样式 */
 .model-capability-button {
   width: 100%;
   justify-content: flex-start;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-sm);
   border-radius: var(--radius);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-primary);
   background: var(--surface);
   color: var(--foreground);
   transition:
@@ -32,4 +33,35 @@
   outline: none;
   box-shadow: 0 0 0 var(--spacing-xs)
     color-mix(in oklch, var(--border-focus) 65%, transparent);
+}
+
+/* 模型能力图标样式（思考/视觉/工具） */
+.model-capability-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem; /* 24px */
+  width: 1.5rem; /* 24px */
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+  background: var(--bg-primary);
+  font-size: 0.875rem;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.model-capability-icon[data-enabled="true"] {
+  border-color: color-mix(in oklch, var(--accent) 45%, transparent);
+  background: color-mix(in oklch, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.model-capability-icon[data-enabled="false"] {
+  border-color: var(--border-light);
+  background: var(--default);
+  color: var(--foreground-tertiary);
+  opacity: 0.5;
 }

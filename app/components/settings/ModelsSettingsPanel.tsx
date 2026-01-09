@@ -25,6 +25,10 @@ import {
 import { useAppTranslation } from "@/app/i18n/hooks";
 import { useStorageSettings } from "@/app/hooks/useStorageSettings";
 import { useToast } from "@/app/components/toast";
+import {
+  isBuiltinProviderEnabled,
+  BUILTIN_PROVIDER_ID,
+} from "@/app/lib/config-utils";
 import ProviderEditDialog from "./ProviderEditDialog";
 import ModelEditDialog from "./ModelEditDialog";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
@@ -80,6 +84,7 @@ export default function ModelsSettingsPanel({
 }: ModelsSettingsPanelProps) {
   const { t } = useAppTranslation("settings");
   const { push } = useToast();
+  const isBuiltin = isBuiltinProviderEnabled();
   const {
     deleteProvider,
     deleteModel,
@@ -432,14 +437,22 @@ export default function ModelsSettingsPanel({
                       variant="tertiary"
                       size="sm"
                       isIconOnly
-                      isDisabled={isDeleting}
+                      isDisabled={isDeleting || isBuiltin}
                       aria-label={t("models.actions.more", "更多操作")}
                     >
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                     <Dropdown.Popover className="z-[1000] min-w-[160px]">
                       <Dropdown.Menu
-                        disabledKeys={isDeleting ? ["edit", "delete"] : []}
+                        disabledKeys={(() => {
+                          if (isDeleting || isBuiltin) {
+                            return ["edit", "delete"];
+                          }
+                          if (provider.id === BUILTIN_PROVIDER_ID) {
+                            return ["edit", "delete"];
+                          }
+                          return [];
+                        })()}
                         onAction={(key) => {
                           if (key === "edit") {
                             handleEditProvider(provider);
@@ -477,24 +490,29 @@ export default function ModelsSettingsPanel({
                             {provider.providerType}
                           </span>
                         </div>
-                        <div className="flex items-start justify-between gap-3">
-                          <span className="shrink-0 text-default-500">
-                            {t("models.provider.apiUrl")}
-                          </span>
-                          <span className="min-w-0 text-right font-medium break-all">
-                            {provider.apiUrl || "—"}
-                          </span>
-                        </div>
-                        <div className="flex items-start justify-between gap-3">
-                          <span className="shrink-0 text-default-500">
-                            {t("models.provider.apiKey")}
-                          </span>
-                          <span className="min-w-0 text-right font-medium break-words">
-                            {provider.apiKey
-                              ? "••••••"
-                              : t("models.provider.noApiKey")}
-                          </span>
-                        </div>
+                        {/* 隐藏内置 provider 的 API URL 和 Key */}
+                        {provider.id !== BUILTIN_PROVIDER_ID && (
+                          <>
+                            <div className="flex items-start justify-between gap-3">
+                              <span className="shrink-0 text-default-500">
+                                {t("models.provider.apiUrl")}
+                              </span>
+                              <span className="min-w-0 text-right font-medium break-all">
+                                {provider.apiUrl || "—"}
+                              </span>
+                            </div>
+                            <div className="flex items-start justify-between gap-3">
+                              <span className="shrink-0 text-default-500">
+                                {t("models.provider.apiKey")}
+                              </span>
+                              <span className="min-w-0 text-right font-medium break-words">
+                                {provider.apiKey
+                                  ? "••••••"
+                                  : t("models.provider.noApiKey")}
+                              </span>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -630,11 +648,8 @@ export default function ModelsSettingsPanel({
                                                   >
                                                     <span
                                                       aria-label={label}
-                                                      className={`flex h-6 w-6 items-center justify-center rounded-md border border-default-200 bg-content2 text-sm transition-colors ${
-                                                        enabled
-                                                          ? "text-primary"
-                                                          : "text-default-400 opacity-50"
-                                                      }`}
+                                                      className="model-capability-icon"
+                                                      data-enabled={enabled}
                                                     >
                                                       <Icon className="h-3.5 w-3.5" />
                                                     </span>
@@ -783,7 +798,12 @@ export default function ModelsSettingsPanel({
         </Accordion>
       )}
 
-      <Button variant="secondary" className="mt-4" onPress={handleAddProvider}>
+      <Button
+        variant="secondary"
+        className="mt-4"
+        onPress={handleAddProvider}
+        isDisabled={isBuiltin}
+      >
         <Plus className="h-4 w-4" />
         {t("models.addProvider")}
       </Button>

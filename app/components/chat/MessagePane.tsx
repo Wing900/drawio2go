@@ -1,12 +1,13 @@
 "use client";
 
 import MessageList from "./MessageList";
-import type { ChatUIMessage, LLMConfig } from "@/app/types/chat";
+import type { ChatUIMessage, LLMConfig, ProviderConfig } from "@/app/types/chat";
 
 interface MessagePaneProps {
   messages: ChatUIMessage[];
   configLoading: boolean;
   llmConfig: LLMConfig | null;
+  providers: ProviderConfig[];
   ensureMessageMetadata: (message: ChatUIMessage) => ChatUIMessage;
   status: string;
   expandedToolCalls: Record<string, boolean>;
@@ -24,6 +25,7 @@ export default function MessagePane({
   messages,
   configLoading,
   llmConfig,
+  providers,
   ensureMessageMetadata,
   status,
   expandedToolCalls,
@@ -37,6 +39,7 @@ export default function MessagePane({
         messages={messages}
         configLoading={configLoading}
         llmConfig={llmConfig}
+        providers={providers}
         ensureMessageMetadata={ensureMessageMetadata}
         status={status}
         expandedToolCalls={expandedToolCalls}

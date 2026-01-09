@@ -2232,6 +2232,7 @@ export default function ChatSidebar({
                 messages={displayMessages}
                 configLoading={configLoading}
                 llmConfig={llmConfig}
+                providers={providers}
                 ensureMessageMetadata={ensureMessageMetadata}
                 status={status}
                 expandedToolCalls={expandedToolCalls}

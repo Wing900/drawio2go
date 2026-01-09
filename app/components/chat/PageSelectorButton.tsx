@@ -5,6 +5,9 @@ import { Button, Dropdown, Label, type ButtonProps } from "@heroui/react";
 import { Layers } from "lucide-react";
 import { useAppTranslation } from "@/app/i18n/hooks";
 import type { DrawioPageInfo } from "@/app/lib/storage/page-metadata";
+import { createLogger } from "@/lib/logger";
+
+const logger = createLogger("PageSelectorButton");
 
 export interface PageSelectorButtonProps {
   pages: DrawioPageInfo[];
@@ -56,6 +59,18 @@ export default function PageSelectorButton({
     ? t("pageSelector.allPagesLabel", `页面: ${t("pageSelector.allPages")}`)
     : t("pageSelector.selectedPages", { selected: selectedCount, total });
   const tooltip = t("pageSelector.tooltip");
+
+  // 调试日志
+  logger.info("PageSelectorButton 渲染状态", {
+    total,
+    selectedCount,
+    isAllSelected,
+    isNoneSelected,
+    isDisabled,
+    isIconOnly,
+    buttonVariant,
+    buttonLabel,
+  });
 
   const allPageIds = useMemo(() => {
     const ids = new Set<string>();
@@ -143,7 +158,9 @@ export default function PageSelectorButton({
       >
         <span className="inline-flex items-center gap-2">
           <Layers size={16} aria-hidden />
-          <span className="page-selector-button__label">{buttonLabel}</span>
+          {!isIconOnly && (
+            <span className="page-selector-button__label">{buttonLabel}</span>
+          )}
         </span>
       </Button>
       <Dropdown.Popover placement="top start" className="min-w-[220px]">

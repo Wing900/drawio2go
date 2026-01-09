@@ -76,7 +76,9 @@
       },
       "noConfig": {
         "title": "尚未配置 AI 供应商",
-        "hint": "请在设置中保存连接参数后重试"
+        "hint": "请在设置中保存连接参数后重试",
+        "builtinTitle": "欢迎使用内置 AI",
+        "builtinHint": "已为您配置好内置模型，可以开始使用了"
       },
       "noMessages": {
         "title": "开始与 AI 助手对话",

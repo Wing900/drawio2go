@@ -82,7 +82,8 @@
       "Bash(git show:*)",
       "Bash(npm run:*)",
       "Bash(file:*)",
-      "Skill(update-agents)"
+      "Skill(update-agents)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []

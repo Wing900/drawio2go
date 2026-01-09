@@ -312,6 +312,7 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
         url.searchParams.set("noSaveBtn", "1");
         url.searchParams.set("noExitBtn", "1");
         url.searchParams.set("dark", initialTheme === "dark" ? "1" : "0");
+        url.searchParams.set("lang", "zh");
 
         // 2) 用户自定义参数优先级最高（覆盖上面的默认设置）
         if (drawioUrlParams) {
@@ -926,7 +927,6 @@ const DrawioEditorNative = forwardRef<DrawioEditorRef, DrawioEditorNativeProps>(
               <Spinner
                 size="xl"
                 color="success"
-                aria-label={tp("main.loadingEditor")}
                 className="loading-overlay__spinner"
               />
               <h2 className="loading-overlay__title">

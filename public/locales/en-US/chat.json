@@ -76,7 +76,9 @@
       },
       "noConfig": {
         "title": "AI provider not configured",
-        "hint": "Save connection settings and try again"
+        "hint": "Save connection settings and try again",
+        "builtinTitle": "Welcome to Built-in AI",
+        "builtinHint": "The built-in model is ready, you can start using it now"
       },
       "noMessages": {
         "title": "Start chatting with the assistant",

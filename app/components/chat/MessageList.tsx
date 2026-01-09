@@ -2,7 +2,12 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Skeleton } from "@heroui/react";
-import { type LLMConfig, type ChatUIMessage } from "@/app/types/chat";
+import {
+  type LLMConfig,
+  type ChatUIMessage,
+  type ProviderConfig,
+} from "@/app/types/chat";
+import { isBuiltinProviderEnabled } from "@/app/lib/config-utils";
 import EmptyState from "./EmptyState";
 import MessageItem from "./MessageItem";
 
@@ -68,6 +73,7 @@ interface MessageListProps {
   messages: ChatUIMessage[];
   configLoading: boolean;
   llmConfig: LLMConfig | null;
+  providers: ProviderConfig[];
   ensureMessageMetadata: (message: ChatUIMessage) => ChatUIMessage;
   status: string;
   expandedToolCalls: Record<string, boolean>;
@@ -80,6 +86,7 @@ export default function MessageList({
   messages,
   configLoading,
   llmConfig,
+  providers,
   ensureMessageMetadata,
   status,
   expandedToolCalls,
@@ -91,6 +98,7 @@ export default function MessageList({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
   const skeletonItems = Array.from({ length: 3 });
+  const isBuiltin = isBuiltinProviderEnabled();
 
   // 监听消息内容与流式状态变化，自动滚动到底部（支持流式追加而不改变长度的场景）
   useEffect(() => {
@@ -139,7 +147,7 @@ export default function MessageList({
   }
 
   if (!llmConfig) {
-    return <EmptyState type="no-config" />;
+    return <EmptyState type="no-config" isBuiltin={isBuiltin && providers.length > 0} />;
   }
 
   if (messages.length === 0) {

@@ -14,7 +14,7 @@
   padding-right: var(--sidebar-width);
 }
 
-/* DrawIO 编辑器容器 */
+/* DrawIO 编辑器容器 - 纸张质感背景 + 中国风边框 */
 .editor-container {
   flex: 1;
   overflow: hidden;
@@ -23,6 +23,10 @@
   height: calc(100dvh - var(--top-bar-height));
   min-height: calc(100vh - var(--top-bar-height));
   position: relative;
+  background: var(--paper-texture);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
 }
 
 /* DrawIO 容器样式 */
@@ -38,46 +42,41 @@
   height: 100%;
 }
 
-/* 顶栏布局 - 使用 Grid 三列布局实现真正居中 */
+/* 顶栏布局 - 简化版，无边框 */
 .top-bar {
   height: var(--top-bar-height);
   min-height: var(--top-bar-height);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: var(--spacing-compact-md);
-  padding: 0 var(--spacing-lg);
-  border-bottom: 1px solid var(--border-light);
-  background: var(--background, #ffffff);
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
   position: sticky;
   top: 0;
   z-index: 60;
 }
 
 .dark .top-bar {
-  background: var(--background, #101418);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: var(--surface);
 }
 
 .top-bar-selection {
-  font-size: var(--font-size-compact-sm);
-  color: var(--text-secondary);
+  font-size: 0.75rem;
+  color: var(--foreground);
   background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius);
-  padding: 0 0.5rem;
-  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-sm);
+  height: 28px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: flex;
   align-items: center;
   width: fit-content;
-}
-
-.dark .top-bar-selection {
-  background: var(--bg-secondary);
-  border-color: var(--border-light);
+  font-weight: 500;
 }
 
 .top-bar-center {

@@ -829,7 +829,6 @@ export default function Home() {
           <Spinner
             size="xl"
             color="success"
-            aria-label={tp("main.loadingProject")}
             className="loading-overlay__spinner"
           />
           <h2 className="loading-overlay__title">
@@ -861,7 +860,6 @@ export default function Home() {
           <Spinner
             size="xl"
             color="success"
-            aria-label={tp("main.loadingProject")}
             className="loading-overlay__spinner"
           />
           <h2 className="loading-overlay__title">

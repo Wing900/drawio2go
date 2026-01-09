@@ -24,6 +24,9 @@ import {
   STORAGE_KEY_LLM_PROVIDERS,
   isDrawioTheme,
   normalizeLLMConfig,
+  getBuiltinProvider,
+  getBuiltinModels,
+  isBuiltinProviderEnabled,
 } from "@/app/lib/config-utils";
 import { getDefaultCapabilities } from "@/app/lib/model-capabilities";
 import { createLogger } from "@/app/lib/logger";
@@ -587,20 +590,48 @@ export function useStorageSettings() {
 
   /**
    * 获取供应商列表
+   * 如果启用了内置 Provider，会自动注入
    */
   const getProviders = useCallback(async (): Promise<ProviderConfig[]> => {
     return execute(async (storage) => {
       const providers = await loadProviders(storage);
+
+      // 如果启用了内置 Provider，注入到列表开头
+      if (isBuiltinProviderEnabled()) {
+        const builtin = getBuiltinProvider();
+        if (builtin) {
+          // 如果用户已经添加了同名 provider（不太可能），跳过内置的
+          if (!providers.find((p) => p.id === builtin.id)) {
+            return [builtin, ...providers];
+          }
+        }
+      }
+
       return providers;
     });
   }, [execute, loadProviders]);
 
   /**
    * 获取模型列表
+   * 如果启用了内置 Provider，会自动注入内置模型
    */
   const getModels = useCallback(async (): Promise<ModelConfig[]> => {
     return execute(async (storage) => {
       const models = await loadModels(storage);
+
+      // 如果启用了内置 Provider，注入内置模型
+      if (isBuiltinProviderEnabled()) {
+        const builtinModels = getBuiltinModels();
+        // 过滤掉用户已添加的同名模型
+        const userModelIds = new Set(models.map((m) => m.id));
+        const newBuiltinModels = builtinModels.filter(
+          (m) => !userModelIds.has(m.id),
+        );
+        if (newBuiltinModels.length > 0) {
+          return [...newBuiltinModels, ...models];
+        }
+      }
+
       return models;
     });
   }, [execute, loadModels]);
@@ -1094,13 +1125,31 @@ export function useStorageSettings() {
       modelId?: string,
     ): Promise<RuntimeLLMConfig | null> => {
       return execute(async (storage) => {
-        const [providers, models, agentSettings, activeModel] =
+        const [storageProviders, storageModels, agentSettings, activeModel] =
           await Promise.all([
             loadProviders(storage),
             loadModels(storage),
             loadAgentSettings(storage),
             loadActiveModel(storage),
           ]);
+
+        // 如果启用了内置 Provider，注入到列表中
+        const providers = [...storageProviders];
+        const models = [...storageModels];
+        if (isBuiltinProviderEnabled()) {
+          const builtin = getBuiltinProvider();
+          if (builtin && !providers.find((p) => p.id === builtin.id)) {
+            providers.unshift(builtin);
+          }
+          const builtinModels = getBuiltinModels();
+          const userModelIds = new Set(storageModels.map((m) => m.id));
+          const newBuiltinModels = builtinModels.filter(
+            (m) => !userModelIds.has(m.id),
+          );
+          if (newBuiltinModels.length > 0) {
+            models.unshift(...newBuiltinModels);
+          }
+        }
 
         let resolvedProviderId = providerId ?? null;
         let resolvedModelId = modelId ?? null;
@@ -1193,7 +1242,16 @@ export function useStorageSettings() {
         return normalizeLLMConfig(mergedConfig);
       });
     },
-    [execute, loadActiveModel, loadAgentSettings, loadModels, loadProviders],
+    [
+      execute,
+      loadActiveModel,
+      loadAgentSettings,
+      loadModels,
+      loadProviders,
+      isBuiltinProviderEnabled,
+      getBuiltinProvider,
+      getBuiltinModels,
+    ],
   );
 
   // 初始化时检查存储可用性

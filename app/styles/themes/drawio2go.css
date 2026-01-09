@@ -13,7 +13,7 @@
     --spacing: 0.25rem;
     --border-width: 0px;
     --field-border-width: var(--border-width);
-    --disabled-opacity: 0.5;
+    --disabled-opacity: 0.75;
     --ring-offset-width: 2px;
     --cursor-interactive: pointer;
     --cursor-disabled: not-allowed;
@@ -24,13 +24,14 @@
     --radius-lg: 0.75rem; /* 12px */
     --field-radius: calc(var(--radius) * 1.5); /* 12px */
 
-    /* Base Colors */
-    --background: oklch(0.9799 0.0059 239.82);
+    /* Base Colors - Cool blue paper texture */
+    --background: oklch(0.98 0.005 240);
     --foreground: var(--eclipse);
-    --foreground-secondary: rgba(15, 23, 42, 0.68);
-    --foreground-tertiary: rgba(15, 23, 42, 0.45);
+    --paper-texture: oklch(0.96 0.01 240);
+    --foreground-secondary: rgba(15, 23, 42, 0.85);
+    --foreground-tertiary: rgba(15, 23, 42, 0.70);
 
-    --surface: var(--white);
+    --surface: oklch(0.995 0.005 240);
     --surface-foreground: var(--foreground);
     --overlay: var(--white);
     --overlay-foreground: var(--foreground);
@@ -41,13 +42,13 @@
     --default: oklch(0.964 0.008 245.11);
     --default-foreground: var(--foreground);
 
-    /* Accent system - Optimized for better contrast and modernity */
-    --accent: oklch(0.6 0.11 235);
-    --accent-foreground: var(--snow);
-    --accent-hover: oklch(0.53 0.13 238);
-    --accent-active: oklch(0.48 0.14 240);
-    --accent-soft: color-mix(in oklch, var(--accent) 8%, var(--background));
-    --accent-soft-foreground: var(--accent-foreground);
+    /* Accent system - Extremely Light Cool Blue Theme */
+    --accent: oklch(0.92 0.04 240);
+    --accent-foreground: oklch(0.25 0.03 240);
+    --accent-hover: oklch(0.88 0.05 240);
+    --accent-active: oklch(0.84 0.06 240);
+    --accent-soft: oklch(0.96 0.02 240);
+    --accent-soft-foreground: oklch(0.30 0.04 240);
 
     --focus: var(--accent);
     --link: var(--accent);
@@ -58,14 +59,14 @@
     --field-placeholder: rgba(15, 23, 42, 0.52);
     --field-border: transparent;
 
-    /* Status colors - Modernized and vibrant */
-    --success: oklch(0.75 0.22 150);
+    /* Status colors - Academic style (softer, eye-friendly) */
+    --success: oklch(0.72 0.18 145);
     --success-foreground: var(--eclipse);
-    --warning: oklch(0.78 0.19 68);
+    --warning: oklch(0.76 0.16 75);
     --warning-foreground: var(--eclipse);
-    --info: oklch(0.62 0.23 290);
+    --info: oklch(0.68 0.12 250);
     --info-foreground: var(--eclipse);
-    --danger: oklch(0.65 0.24 25);
+    --danger: oklch(0.62 0.20 30);
     --danger-foreground: var(--snow);
     --toast-surface-mix: 12%;
 
@@ -73,18 +74,18 @@
     --segment: var(--white);
     --segment-foreground: var(--foreground);
 
-    /* Border System - Enhanced contrast */
-    --border: color-mix(in oklch, var(--accent) 18%, transparent);
-    --border-primary: color-mix(in oklch, var(--accent) 40%, transparent);
-    --border-light: color-mix(in oklch, var(--accent) 28%, transparent);
-    --border-hover: color-mix(in oklch, var(--accent) 55%, transparent);
-    --border-focus: color-mix(in oklch, var(--accent) 65%, transparent);
-    --divider: oklch(0.92 0.007 240.21);
+    /* Border System - Neutral gray borders (no yellow tint) */
+    --border: oklch(0.88 0.005 240 / 0.3);
+    --border-primary: oklch(0.82 0.008 240 / 0.4);
+    --border-light: oklch(0.90 0.004 240 / 0.25);
+    --border-hover: oklch(0.78 0.010 240 / 0.5);
+    --border-focus: var(--accent);
+    --divider: oklch(0.92 0.005 240 / 0.2);
 
-    /* Background System - Optimized transparency */
-    --bg-primary: color-mix(in oklch, var(--accent) 6%, transparent);
-    --bg-secondary: color-mix(in oklch, var(--accent) 10%, transparent);
-    --bg-hover: color-mix(in oklch, var(--accent) 15%, transparent);
+    /* Background System - Enhanced contrast for better readability */
+    --bg-primary: color-mix(in oklch, var(--accent) 15%, transparent);
+    --bg-secondary: color-mix(in oklch, var(--accent) 20%, transparent);
+    --bg-hover: color-mix(in oklch, var(--accent) 30%, transparent);
 
     /* Gray Scale System */
     --gray-primary: oklch(0.5437 0.0149 258.28);
@@ -92,14 +93,13 @@
     --gray-border: color-mix(in oklch, var(--gray-light) 25%, transparent);
     --gray-bg: color-mix(in oklch, var(--gray-light) 4%, transparent);
 
-    /* Material Design Shadow System - Enhanced with color tint */
-    --shadow-xs: 0 1px 2px color-mix(in oklch, var(--accent) 12%, transparent);
-    --shadow-1: 0 1px 4px color-mix(in oklch, var(--accent) 18%, transparent);
-    --shadow-2: 0 2px 8px color-mix(in oklch, var(--accent) 22%, transparent);
-    --shadow-4: 0 4px 16px color-mix(in oklch, var(--accent) 26%, transparent);
-    --shadow-8: 0 8px 32px color-mix(in oklch, var(--accent) 30%, transparent);
-    --shadow-sidebar: -2px 0 12px
-      color-mix(in oklch, var(--accent) 15%, transparent);
+    /* Material Design Shadow System - Cool tinted shadows */
+    --shadow-xs: 0 1px 2px oklch(0.75 0.02 240 / 0.08);
+    --shadow-1: 0 1px 3px oklch(0.7 0.02 240 / 0.12);
+    --shadow-2: 0 2px 6px oklch(0.65 0.03 240 / 0.16);
+    --shadow-4: 0 4px 12px oklch(0.6 0.03 240 / 0.20);
+    --shadow-8: 0 8px 24px oklch(0.55 0.04 240 / 0.24);
+    --shadow-sidebar: -2px 0 12px oklch(0.7 0.02 240 / 0.15);
 
     /* Component Shadows */
     --surface-shadow: var(--shadow-1);
@@ -141,12 +141,13 @@
     --snow: oklch(0.9911 0 0);
     --eclipse: oklch(0.2103 0.0059 285.89);
 
-    --background: oklch(0.16 0.035 238);
+    --background: oklch(0.16 0.01 240);
     --foreground: var(--snow);
-    --foreground-secondary: rgba(248, 250, 252, 0.78);
-    --foreground-tertiary: rgba(248, 250, 252, 0.52);
+    --paper-texture: oklch(0.18 0.015 240);
+    --foreground-secondary: rgba(248, 250, 252, 0.90);
+    --foreground-tertiary: rgba(248, 250, 252, 0.75);
 
-    --surface: oklch(0.22 0.042 240);
+    --surface: oklch(0.22 0.015 240);
     --surface-foreground: var(--foreground);
     --overlay: oklch(0.26 0.045 240);
     --overlay-foreground: var(--foreground);
@@ -157,12 +158,12 @@
     --default: oklch(0.3 0.025 242);
     --default-foreground: var(--foreground);
 
-    --accent: oklch(0.72 0.12 235);
-    --accent-foreground: var(--snow);
-    --accent-hover: oklch(0.77 0.13 237);
-    --accent-active: oklch(0.82 0.14 238);
-    --accent-soft: color-mix(in oklch, var(--accent) 18%, var(--background));
-    --accent-soft-foreground: var(--accent-foreground);
+    --accent: oklch(0.75 0.08 240);
+    --accent-foreground: oklch(0.95 0.01 240);
+    --accent-hover: oklch(0.78 0.09 240);
+    --accent-active: oklch(0.81 0.10 240);
+    --accent-soft: oklch(0.28 0.05 240);
+    --accent-soft-foreground: var(--snow);
 
     --focus: var(--accent);
     --link: var(--accent);
@@ -172,31 +173,31 @@
     --field-placeholder: rgba(248, 250, 252, 0.55);
     --field-border: rgba(255, 255, 255, 0.08);
 
-    --success: oklch(0.76 0.22 150);
+    --success: oklch(0.76 0.20 148);
     --success-foreground: var(--snow);
-    --warning: oklch(0.82 0.19 68);
+    --warning: oklch(0.82 0.17 78);
     --warning-foreground: var(--snow);
-    --info: oklch(0.7 0.23 290);
+    --info: oklch(0.72 0.15 255);
     --info-foreground: var(--snow);
-    --danger: oklch(0.68 0.24 25);
+    --danger: oklch(0.68 0.22 32);
     --danger-foreground: var(--snow);
     --toast-surface-mix: 20%;
 
     --segment: color-mix(in oklch, var(--surface) 85%, var(--background));
     --segment-foreground: var(--foreground);
 
-    /* Border System - Enhanced for dark mode */
-    --border: color-mix(in oklch, var(--accent) 30%, transparent);
-    --border-primary: color-mix(in oklch, var(--accent) 40%, transparent);
-    --border-light: color-mix(in oklch, var(--accent) 25%, transparent);
-    --border-hover: color-mix(in oklch, var(--accent) 50%, transparent);
-    --border-focus: color-mix(in oklch, var(--accent) 65%, transparent);
-    --divider: oklch(0.28 0.015 238);
+    /* Border System - Neutral gray borders for dark mode */
+    --border: oklch(0.35 0.008 240 / 0.3);
+    --border-primary: oklch(0.42 0.012 240 / 0.4);
+    --border-light: oklch(0.32 0.006 240 / 0.25);
+    --border-hover: oklch(0.48 0.015 240 / 0.5);
+    --border-focus: var(--accent);
+    --divider: oklch(0.28 0.008 240 / 0.2);
 
-    /* Background System - Enhanced transparency */
-    --bg-primary: color-mix(in oklch, var(--accent) 12%, transparent);
-    --bg-secondary: color-mix(in oklch, var(--accent) 18%, transparent);
-    --bg-hover: color-mix(in oklch, var(--accent) 25%, transparent);
+    /* Background System - Enhanced contrast for dark mode */
+    --bg-primary: color-mix(in oklch, var(--accent) 20%, transparent);
+    --bg-secondary: color-mix(in oklch, var(--accent) 28%, transparent);
+    --bg-hover: color-mix(in oklch, var(--accent) 38%, transparent);
 
     /* Gray Scale System */
     --gray-primary: oklch(0.58 0.03 257.1);
@@ -204,17 +205,13 @@
     --gray-border: color-mix(in oklch, var(--gray-light) 35%, transparent);
     --gray-bg: color-mix(in oklch, var(--gray-light) 8%, transparent);
 
-    /* Material Design Shadow System - Tinted for depth */
-    --shadow-xs: 0 1px 2px
-      color-mix(in oklch, oklch(0 0.1 235) 25%, transparent);
-    --shadow-1: 0 1px 4px color-mix(in oklch, oklch(0 0.1 235) 35%, transparent);
-    --shadow-2: 0 2px 8px color-mix(in oklch, oklch(0 0.1 235) 42%, transparent);
-    --shadow-4: 0 4px 16px
-      color-mix(in oklch, oklch(0 0.1 235) 48%, transparent);
-    --shadow-8: 0 8px 32px
-      color-mix(in oklch, oklch(0 0.1 235) 55%, transparent);
-    --shadow-sidebar: -2px 0 12px
-      color-mix(in oklch, var(--accent) 22%, transparent);
+    /* Material Design Shadow System - Deep cool shadows */
+    --shadow-xs: 0 1px 2px oklch(0.1 0.02 240 / 0.3);
+    --shadow-1: 0 1px 3px oklch(0.08 0.02 240 / 0.4);
+    --shadow-2: 0 2px 6px oklch(0.06 0.03 240 / 0.5);
+    --shadow-4: 0 4px 12px oklch(0.04 0.03 240 / 0.6);
+    --shadow-8: 0 8px 24px oklch(0.02 0.04 240 / 0.7);
+    --shadow-sidebar: -2px 0 12px oklch(0.08 0.02 240 / 0.4);
 
     /* Component Shadows */
     --surface-shadow: var(--shadow-1);
