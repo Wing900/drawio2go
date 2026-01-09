@@ -376,10 +376,18 @@ function convertImagePartsInMessages(
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("[CF-DEBUG] AI Proxy POST 开始处理请求");
+    console.log("[CF-DEBUG] Runtime:", typeof process !== "undefined" ? "Node.js" : "Edge");
+    console.log("[CF-DEBUG] CF_PAGES:", process.env.CF_PAGES);
+    
     const body = (await req.json()) as AiProxyRequest;
+    console.log("[CF-DEBUG] 请求体解析成功");
+    
     const validation = validateRequest(body);
+    console.log("[CF-DEBUG] 请求验证完成:", validation.ok);
 
     if (!validation.ok) {
+      console.error("[CF-DEBUG] 请求验证失败:", validation.error);
       return apiError(
         validation.error.code,
         validation.error.message,
@@ -387,6 +395,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log("[CF-DEBUG] 开始规范化配置");
     const normalizedConfig: LLMConfig = normalizeLLMConfig({
       providerType: validation.rawConfig.providerType,
       modelName: validation.rawConfig.modelName,
@@ -398,8 +407,11 @@ export async function POST(req: NextRequest) {
       capabilities: validation.rawConfig.capabilities,
       skillSettings: validation.rawConfig.skillSettings,
     });
+    console.log("[CF-DEBUG] 配置规范化完成");
 
+    console.log("[CF-DEBUG] 开始创建模型实例");
     const model = createModelFromConfig(normalizedConfig);
+    console.log("[CF-DEBUG] 模型实例创建成功");
     const visionCheck = checkVisionSupport(
       validation.messages,
       normalizedConfig.capabilities.supportsVision,
@@ -431,8 +443,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log("[CF-DEBUG] 开始转换消息格式");
     const modelMessages = await convertToModelMessages(converted.messages);
+    console.log("[CF-DEBUG] 消息格式转换完成，消息数:", modelMessages.length);
+    
+    console.log("[CF-DEBUG] 开始构建工具集");
     const toolSet = toToolSet(validation.tools);
+    console.log("[CF-DEBUG] 工具集构建完成，工具数:", toolSet ? Object.keys(toolSet).length : 0);
 
     let systemPrompt = normalizedConfig.systemPrompt;
     if (hasTemplateVariables(systemPrompt)) {
@@ -463,6 +480,7 @@ export async function POST(req: NextRequest) {
       toolsCount: validation.tools ? Object.keys(validation.tools).length : 0,
     });
 
+    console.log("[CF-DEBUG] 开始调用 streamText");
     const result = streamText({
       model,
       system: systemPrompt,
@@ -472,9 +490,13 @@ export async function POST(req: NextRequest) {
       tools: toolSet,
       abortSignal: req.signal,
     });
+    console.log("[CF-DEBUG] streamText 调用成功，准备返回流式响应");
 
     return result.toUIMessageStreamResponse({ sendReasoning: true });
   } catch (error: unknown) {
+    console.error("[CF-DEBUG] AI Proxy 捕获错误:", error);
+    console.error("[CF-DEBUG] 错误堆栈:", error instanceof Error ? error.stack : "无堆栈");
+    
     if (error instanceof Error && error.name === "AbortError") {
       logger.info("[AI Proxy API] 流式响应被用户中断");
       return apiError(
@@ -487,6 +509,12 @@ export async function POST(req: NextRequest) {
     logger.error("AI Proxy API error", error);
     const err = error as Error;
     const classified = classifyError(err);
+    
+    console.error("[CF-DEBUG] 分类后的错误:", {
+      code: classified.code,
+      message: classified.message,
+      statusCode: classified.statusCode,
+    });
 
     return apiError(classified.code, classified.message, classified.statusCode);
   }

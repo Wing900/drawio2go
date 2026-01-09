@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 const isVercel = Boolean(process.env.VERCEL);
-const isCloudflarePages = process.env.CF_PAGES === "1";
+// Cloudflare Pages 自动注入 CF_PAGES 环境变量（任意真值）
+const isCloudflarePages = Boolean(process.env.CF_PAGES);
+
+console.log("[Next Config] 环境检测:", {
+  isVercel,
+  isCloudflarePages,
+  CF_PAGES: process.env.CF_PAGES,
+  VERCEL: process.env.VERCEL,
+  NODE_ENV: process.env.NODE_ENV,
+});
 
 const nextConfig = {
   // 优化 HeroUI 导入
@@ -21,5 +30,10 @@ const nextConfig = {
     unoptimized: !isVercel && !isCloudflarePages,
   },
 };
+
+console.log("[Next Config] 最终配置:", {
+  output: nextConfig.output,
+  imagesUnoptimized: nextConfig.images.unoptimized,
+});
 
 export default nextConfig;
