@@ -3,10 +3,6 @@ name = "drawio2go"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = ".vercel/output/static"
 
-# 构建配置：设置 CF_PAGES 环境变量
-[build]
-command = "CF_PAGES=1 npm run build"
-
 # 核心：强制开启 Node.js 兼容性
 compatibility_flags = ["nodejs_compat"]
 
@@ -14,3 +10,4 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 VERCEL = "1"
 NODE_VERSION = "20"
+CF_PAGES = "1"
