@@ -516,12 +516,12 @@ export const ENV_BUILTIN_PROVIDER = "NEXT_PUBLIC_DRAWIO2GO_BUILTIN_PROVIDER";
 /**
  * 从环境变量解析内置 Provider 配置
  * 格式示例：
- * DRAWIO2GO_BUILTIN_PROVIDER='{"displayName":"内置AI","providerType":"openai-compatible","apiUrl":"https://api.example.com/v1","apiKey":"sk-xxx","models":[{"modelName":"gpt-4","displayName":"GPT-4"}]}'
+ * NEXT_PUBLIC_DRAWIO2GO_BUILTIN_PROVIDER='{"displayName":"内置AI","providerType":"openai-compatible","apiUrl":"https://api.example.com/v1","apiKey":"sk-xxx","models":[{"modelName":"gpt-4","displayName":"GPT-4"}]}'
+ *
+ * 注意：Edge Runtime 兼容 - 直接读取 NEXT_PUBLIC_ 前缀的环境变量（编译时注入）
  */
 export function parseBuiltinProvider(): BuiltinProviderConfig | null {
-  const envValue = typeof process !== "undefined"
-    ? process.env[ENV_BUILTIN_PROVIDER]
-    : undefined;
+  const envValue = process.env.NEXT_PUBLIC_DRAWIO2GO_BUILTIN_PROVIDER;
 
   if (!envValue || typeof envValue !== "string") {
     return null;
