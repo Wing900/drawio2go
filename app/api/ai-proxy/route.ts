@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { normalizeLLMConfig, isProviderType } from "@/app/lib/config-utils";
 import {
   checkVisionSupport,

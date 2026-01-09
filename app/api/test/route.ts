@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import {
   normalizeLLMConfig,
   DEFAULT_ANTHROPIC_API_URL,
