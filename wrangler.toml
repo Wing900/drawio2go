@@ -8,5 +8,4 @@ compatibility_flags = ["nodejs_compat"]
 
 # 环境变量（非加密）
 [vars]
-VERCEL = "1"
 NODE_VERSION = "20"

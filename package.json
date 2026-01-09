@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
+    "build:cf": "npx @cloudflare/next-on-pages@latest",
     "start": "NODE_ENV=production node server.js",
     "lint": "eslint . && npx tsc --noEmit",
     "test": "vitest run",
