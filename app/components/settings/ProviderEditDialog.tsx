@@ -289,6 +289,7 @@ export function ProviderEditDialog({
 
                 <Select
                   isRequired
+                  isDisabled={isBuiltin}
                   selectedKey={formData.providerType}
                   onSelectionChange={(keys) => {
                     const selection = normalizeSelection(keys);
@@ -348,7 +349,7 @@ export function ProviderEditDialog({
                       handleFieldChange("apiUrl", event.target.value)
                     }
                     placeholder={t("models.form.apiUrl.placeholder")}
-                    isDisabled={isBuiltin}
+                    disabled={isBuiltin}
                   />
                   <Description className="whitespace-pre-line">
                     {t("models.form.apiUrl.description")}
@@ -372,7 +373,7 @@ export function ProviderEditDialog({
                       handleFieldChange("apiKey", event.target.value)
                     }
                     placeholder={t("models.form.apiKey.placeholder")}
-                    isDisabled={isBuiltin}
+                    disabled={isBuiltin}
                   />
                   <Description>
                     {t("models.form.apiKey.description")}
