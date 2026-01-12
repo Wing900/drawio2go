@@ -148,6 +148,7 @@
       "modern": "Modern",
       "academic": "Academic",
       "minimal": "Minimal",
+      "handDrawn": "Hand-Drawn",
       "custom": "Custom",
       "unknown": "Unknown style"
     },
