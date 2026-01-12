@@ -45,7 +45,7 @@ There are two types of diagram elements:
 
 1. **Vertex (Node/Shape)**: A visual box or shape
 \`\`\`xml
-<mxCell id="node-1" value="Text" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+<mxCell id="n_a1b2c3" value="Text" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
   <mxGeometry x="100" y="50" width="120" height="60" as="geometry"/>
 </mxCell>
 \`\`\`
@@ -55,7 +55,7 @@ There are two types of diagram elements:
 
 2. **Edge (Connector/Line)**: A line connecting two nodes
 \`\`\`xml
-<mxCell id="edge-1" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1" edge="1" parent="1" source="node-1" target="node-2">
+<mxCell id="e_d4e5f6" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1" edge="1" parent="1" source="n_a1b2c3" target="n_x7y8z9">
   <mxGeometry relative="1" as="geometry">
     <Array as="points">
       <mxPoint x="240" y="120"/>
@@ -116,7 +116,7 @@ There are two types of diagram elements:
 
 **Example**: Connect Node A (center: 160,80) to Node B (center: 320,240)
 \`\`\`xml
-<mxCell id="edge-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1" edge="1" parent="1" source="A" target="B">
+<mxCell id="e_k1l2m3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1" edge="1" parent="1" source="n_p4q5r6" target="n_s7t8u9">
   <mxGeometry relative="1" as="geometry">
     <Array as="points">
       <mxPoint x="240" y="80"/>
