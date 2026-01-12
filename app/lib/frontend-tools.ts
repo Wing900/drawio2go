@@ -1990,12 +1990,9 @@ function createDrawioEditBatchTool(context: FrontendToolContext) {
   - ✓ \`as="geometry"/>\`
   - ✗ \`as="geometry" />\`
 - Avoid style props: \`whiteSpace=wrap\`, \`html=1\`, \`aspect=fixed\`
-- **NEVER** use \`id: "1"\` (reserved internal parent node)
-- Use \`xpath: "/mxfile/diagram/mxGraphModel/root"\` for top-level elements
-
-**Options:**
-- \`allow_no_match: true\`: Skip operation if target not found (instead of failing)
-- \`description\`: Human-readable description for logging
+- **For Top-Level Nodes**: Use \`id: "1"\` (targets the Default Layer root)
+- **For Nested Nodes (inside a Group)**: Use \`id: "{parent_cell_id}"\`
+- **OR** use \`xpath: "/mxfile/diagram/mxGraphModel/root"\` for root elements
 
 **Example:**
 \`\`\`json
@@ -2003,7 +2000,7 @@ function createDrawioEditBatchTool(context: FrontendToolContext) {
   "operations": [
     {
       "type": "insert_element",
-      "xpath": "/mxfile/diagram/mxGraphModel/root",
+      "id": "1",
       "position": "append_child",
       "new_xml": "<mxCell id=\\"circle-1\\" value=\\"Label\\" style=\\"ellipse;fillColor=#ffffff;strokeColor=#000000\\" vertex=\\"1\\" parent=\\"1\\"><mxGeometry x=\\"100\\" y=\\"100\\" width=\\"80\\" height=\\"80\\" as=\\"geometry\\"/></mxCell>"
     }
