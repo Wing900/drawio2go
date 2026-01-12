@@ -208,11 +208,16 @@ function buildXPathStringLiteral(value: string): string {
 /**
  * Resolve id or xpath to a standardized XPath expression.
  * - Prioritizes id if both provided
- * - id converts to //mxCell[@id='xxx'], with XPath 1.0 string escaping
+ * - Special case: id="1" targets the Default Layer root (/mxGraphModel/root)
+ * - Other ids convert to //mxCell[@id='xxx'], with XPath 1.0 string escaping
  */
 function resolveLocator(locator: { xpath?: string; id?: string }): string {
   if (locator.id && locator.id.trim() !== "") {
     const id = locator.id.trim();
+    // id="1" is a special case: it targets the Default Layer root, not mxCell id="1"
+    if (id === "1") {
+      return "/mxfile/diagram/mxGraphModel/root";
+    }
     return `//mxCell[@id=${buildXPathStringLiteral(id)}]`;
   }
 
