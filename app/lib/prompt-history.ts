@@ -42,14 +42,14 @@ Replace entire diagram XML. Use only for template replacement or complete restru
   <root>
     <mxCell id="0"/>                          <!-- Root layer -->
     <mxCell id="1" parent="0"/>               <!-- Default parent -->
-    <mxCell id="node-1" value="Label"
+    <mxCell id="n_x7y8z9" value="Label"
             style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf"
             vertex="1" parent="1">
       <mxGeometry x="100" y="100" width="120" height="60" as="geometry"/>
     </mxCell>
-    <mxCell id="edge-1" value=""
+    <mxCell id="e_k1l2m3" value=""
             style="edgeStyle=orthogonalEdgeStyle"
-            edge="1" parent="1" source="node-1" target="node-2">
+            edge="1" parent="1" source="n_x7y8z9" target="n_p4q5r6">
       <mxGeometry relative="1" as="geometry"/>
     </mxCell>
   </root>
@@ -133,7 +133,7 @@ You should assume the LLM knows nothing about DrawIO XML. Be explicit, but keep 
 To prevent overlaps, prefer orthogonal edges and add explicit waypoints:
 
 \`\`\`xml
-<mxCell id="edge-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1" edge="1" parent="1" source="node-1" target="node-2">
+<mxCell id="e_s7t8u9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1" edge="1" parent="1" source="n_a1b2c3" target="n_d4e5f6">
   <mxGeometry relative="1" as="geometry">
     <Array as="points">
       <mxPoint x="240" y="120"/>

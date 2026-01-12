@@ -2002,7 +2002,7 @@ function createDrawioEditBatchTool(context: FrontendToolContext) {
       "type": "insert_element",
       "id": "1",
       "position": "append_child",
-      "new_xml": "<mxCell id=\\"circle-1\\" value=\\"Label\\" style=\\"ellipse;fillColor=#ffffff;strokeColor=#000000\\" vertex=\\"1\\" parent=\\"1\\"><mxGeometry x=\\"100\\" y=\\"100\\" width=\\"80\\" height=\\"80\\" as=\\"geometry\\"/></mxCell>"
+      "new_xml": "<mxCell id=\\"n_a1b2c3\\" value=\\"Label\\" style=\\"ellipse;fillColor=#ffffff;strokeColor=#000000\\" vertex=\\"1\\" parent=\\"1\\"><mxGeometry x=\\"100\\" y=\\"100\\" width=\\"80\\" height=\\"80\\" as=\\"geometry\\"/></mxCell>"
     }
   ],
   "description": "Add circle shape"
