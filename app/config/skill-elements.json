@@ -16,6 +16,11 @@
       "promptFragment": "Minimal (wireframes, concept maps)\n- Palette: Follow user's color theme if provided. If none is provided, use monochrome/dual-tone; use color sparingly and consistently.\n- Shapes: Basic forms only; no icons; no/very light fill; thin borders.\n- Layout: Few elements; lots of whitespace; short labels; avoid dense clusters.\n- Connectors: Straight or simple orthogonal; thin lines; open arrows; minimal bends.\n- Avoid: Shadows, gradients, heavy borders, complex shapes, visual noise."
     },
     {
+      "id": "nordic",
+      "nameKey": "skill.theme.nordic",
+      "promptFragment": "Nordic Hand-Drawn (Professional Architectural Sketch)\n- Design Philosophy: Create diagrams that look like professional architectural sketches. Minimalist, Muted, Chalk-like, Sophisticated.\n- Mandatory Style Attributes: All nodes must include `sketch=1;rounded=1;fillStyle=hachure;hachureGap=5;fillWeight=2;jiggle=1;strokeWidth=2;arcSize=10;html=1;`\n- Color Palette (Morandi/Muted - DO NOT invent colors):\n  * Stroke (Ink): #424242 (Dark Charcoal, softer than black)\n  * Neutral/Default: #F5F5F5 (Off-white)\n  * Highlight/Urgent: #F2C8C3 (Dusty Rose)\n  * Primary/Core: #D3E3FD (Muted Sky)\n  * Success/Stable: #C8E6C9 (Sage Green)\n  * Note/Idea: #FFF9C4 (Pale Cream)\n  * Complex: #E1BEE7 (Soft Thistle)\n- Typography: Use 'Verdana' or 'Comic Sans MS' if available. Text Color: #212121 (Almost Black).\n- Avoid: Neon colors, high saturation, messy child-like scribbles."
+    },
+    {
       "id": "custom",
       "nameKey": "skill.theme.custom",
       "promptFragment": "Custom (user-defined)\n- Follow user's style description exactly as provided in conversation.\n- If no style specified, fall back to Modern theme.\n- Respect all user palette/brand rules verbatim.\n- Keep palette small and consistent; never invent arbitrary colors."
