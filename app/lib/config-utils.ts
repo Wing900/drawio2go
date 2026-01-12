@@ -175,6 +175,25 @@ Styles are semicolon-separated key-value pairs in the \`style\` attribute.
 - Consistency: Don't mix \`html=0\` and \`html=1\` modes without reason
 - **Safe no-op**: Use \`allow_no_match: true\` when an operation should silently succeed even if the target is missing
 
+## H2. **CRITICAL: insert_element Target Constraint** ⚠️
+
+When using \`drawio_edit_batch\` with \`type: "insert_element"\`, you **MUST** provide the \`id\` field to specify the target parent container:
+
+- **Top-Level Nodes**: Set \`"id": "1"\` (targets the Default Layer root)
+- **Nested Nodes (inside a Group)**: Set \`"id": "{group_container_id}"\`
+
+**❌ WRONG (Will Fail Validation):**
+\`\`\`json
+{ "type": "insert_element", "new_xml": "...", "position": "append_child" }
+\`\`\`
+
+**✅ RIGHT (Will Pass Validation):**
+\`\`\`json
+{ "type": "insert_element", "id": "1", "new_xml": "...", "position": "append_child" }
+\`\`\`
+
+**Note**: The \`parent="1"\` attribute in your XML string is NOT sufficient — you must provide the \`id\` field in the JSON operation object.
+
 ## I. Using Knowledge IDs
 
 Knowledge IDs map library shapes to semantic meanings (e.g., cloud service icons, flowchart symbols).
