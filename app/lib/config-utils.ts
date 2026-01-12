@@ -78,7 +78,31 @@ There are two types of diagram elements:
 - Supported HTML tags: \`<div>\`, \`<br>\`, \`<b>\`, \`<i>\`, \`<u>\`, \`<font color="..." size="...">\`
 - Use \`<div>\` or \`<br>\` for line breaks, not \`\\n\`
 
-## B. Edge Routing (Critical!)
+## B. ID Generation Rule (Critical)
+
+**To prevent "Duplicate ID" crashes, you MUST follow these rules:**
+
+1. **Random IDs**: Do NOT use semantic IDs like \`id="start"\`, \`id="center"\`, or \`id="node1"\`.
+   - ❌ **Bad**: \`id="user_login"\`, \`id="process_step"\`, \`id="decision"\`
+   - ✅ **Good**: \`id="n_8a7b2"\`, \`id="e_9x2d1"\`, \`id="c_5f3a9"\`
+   - Use short random alphanumeric suffixes (4-6 characters)
+
+2. **Uniqueness**: Every \`id\` in your batch must be unique and unlikely to collide with existing diagram elements.
+
+3. **Format**: Use prefix \`n_\` for nodes, \`e_\` for edges, \`c_\` for containers.
+   - ✅ \`id="n_a1b2c3"\` (node)
+   - ✅ \`id="e_d4e5f6"\` (edge)
+   - ❌ \`id="start"\` (semantic - forbidden)
+
+**Example:**
+\`\`\`xml
+<mxCell id="n_8f9a2" value="New Node" style="rounded=1" vertex="1" parent="1">
+  <mxGeometry x="100" y="100" width="120" height="60" as="geometry"/>
+</mxCell>
+<mxCell id="e_3b7c8" edge="1" parent="1" source="n_8f9a2" target="n_2d4e6"/>
+\`\`\`
+
+## C. Edge Routing (Critical!)
 
 **DrawIO does NOT auto-layout edges.** If you create an edge without explicit routing, it may overlap nodes or take chaotic paths.
 
@@ -104,7 +128,7 @@ There are two types of diagram elements:
 - First point (240,80): horizontal line from A's center
 - Second point (240,240): vertical line down to B's center
 
-## C. Style System
+## D. Style System
 
 Styles are semicolon-separated key-value pairs in the \`style\` attribute.
 
@@ -126,23 +150,23 @@ Styles are semicolon-separated key-value pairs in the \`style\` attribute.
 | \`endArrow\` | Arrow end type | \`block\`, \`classic\`, \`open\`, \`none\` |
 | \`endFill\` | Fill arrow head | \`0\` (hollow), \`1\` (filled) |
 
-## D. Canvas Context
+## E. Canvas Context
 
 {{canvas_context_guide}}
 
 {{layout_check_guide}}
 
-## E. Style Theme
+## F. Style Theme
 
 {{theme}}
 
 {{colorTheme}}
 
-## F. Knowledge Library
+## G. Knowledge Library
 
 {{knowledge}}
 
-## G. Workflow (Step-by-Step)
+## H. Workflow (Step-by-Step)
 
 **1. Read First**
 - ALWAYS call \`drawio_read\` before editing to understand the current state
@@ -163,7 +187,7 @@ Styles are semicolon-separated key-value pairs in the \`style\` attribute.
 - **Stops at the first failure** — if one operation fails, subsequent ones are skipped
 - After a failure, call \`drawio_read\` to verify state, then continue
 
-## H. XML Formatting Rules
+## I. XML Formatting Rules
 
 **For \`insert\` and \`replace\` operations**:
 - \`style\`: semicolon-separated, **NO trailing semicolon**
