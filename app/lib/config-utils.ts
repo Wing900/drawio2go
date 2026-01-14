@@ -261,7 +261,7 @@ export const DEFAULT_PROVIDERS: ProviderConfig[] = [];
 export const DEFAULT_MODELS: ModelConfig[] = [];
 
 export const DEFAULT_SKILL_SETTINGS: SkillSettings = {
-  selectedTheme: "modern",
+  selectedTheme: "hand-drawn",
   selectedKnowledge: ["general"],
   customThemePrompt: "",
   customKnowledgeContent: "",
